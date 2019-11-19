@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     int k_bits;
 
     mode = argv[1];
-    BranchPredictor branch_predict();
+    BranchPredictor branch_predict;
 
     int result = strcmp(mode, "bimodal");
     if (result == 0) {
@@ -37,12 +37,18 @@ int main(int argc, char **argv) {
         btb_size = strtol(argv[3], nullptr, 10);
         btb_assoc = strtol(argv[4], nullptr, 10);
         trace_file = argv[5];
+
+        branch_predict.bimodal_setter(m2_bits, trace_file);
+
     } else if (result == 5) {
         m1_bits = strtol(argv[2], nullptr, 10);
         n_bits = strtol(argv[3], nullptr, 10);
         btb_size = strtol(argv[4], nullptr, 10);
         btb_assoc = strtol(argv[5], nullptr, 10);
         trace_file = argv[6];
+
+        branch_predict.gshare_setter(m1_bits, n_bits, trace_file);
+
     } else {
         k_bits = strtol(argv[2], nullptr, 10);
         m1_bits = strtol(argv[3], nullptr, 10);
@@ -51,21 +57,30 @@ int main(int argc, char **argv) {
         btb_size = strtol(argv[6], nullptr, 10);
         btb_assoc = strtol(argv[7], nullptr, 10);
         trace_file = argv[8];
+
+        branch_predict.hybrid_setter(k_bits, m1_bits, n_bits, m2_bits, trace_file);
+
     }
 
     //Reads in trace file
     string data_segment;
+    long value;
+    char real_route;
+
     ifstream input(trace_file);
     while (getline(input, data_segment)) {
+        value = strtol(data_segment.substr(0, 5).c_str(), nullptr, 10);
+        real_route = data_segment.at(7);
+
         //bimodal
         if (result == 0) {
-            branch_predict.bimodal(data_segment);
+            branch_predict.bimodal(real_route, value);
         } //gshare
         else if (result == 5) {
-            branch_predict.gshare(data_segment);
+            branch_predict.gshare(real_route, value);
         } //hybrid
         else {
-            branch_predict.hybrid(data_segment);
+            branch_predict.hybrid(real_route, value);
         }
     }
 

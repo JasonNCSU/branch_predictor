@@ -8,20 +8,27 @@
 
 class BranchPredictor {
 private:
-    //methods
+    //methods============================
 
-    //variables
-
+    //variables==========================
+    char *trace_file;
+    int m2_bits;
+    int m1_bits;
+    int n_bits;
+    int k_bits;
 
 public:
-    //constructors
+    //constructors=======================
     BranchPredictor(void);
-    BranchPredictor(int m2_bits, char *trace_file);
-    BranchPredictor(int m1_bits, int n_bits, char *trace_file);
-    BranchPredictor(int k_bits, int m1_bits, int n_bits, int m2_bits, char *trace_file);
 
-    //other public methods
+    //other public methods===============
+    void bimodal_setter(int m2_bits, char *trace_file);
+    void gshare_setter(int m1_bits, int n_bits, char *trace_file);
+    void hybrid_setter(int k_bits, int m1_bits, int n_bits, int m2_bits, char *trace_file);
 
+    void bimodal(char route, long value);
+    void gshare(char route, long value);
+    void hybrid(char route, long value);
 };
 
 
