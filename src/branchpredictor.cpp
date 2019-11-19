@@ -28,16 +28,19 @@ void BranchPredictor::hybrid_setter(int k, int m1, int n, int m2, char *file) {
     m2_bits = m2;
     trace_file = file;
 }
+void BranchPredictor::route_setter(char route) {
+    real_path = route;
+}
 //Setter methods, instead of constructor due to the way that C++ initializes objects
 
 //Delegator Methods for each mode
-void BranchPredictor::bimodal(char route, long value) {
+void BranchPredictor::bimodal(long value) {
     //TODO bimodal branch prediction
 }
-void BranchPredictor::gshare(char route, long value) {
-    //TODO gshare branch prediction
+void BranchPredictor::gshare(long value) {
+    //TODO bimodal branch prediction
 }
-void BranchPredictor::hybrid(char route, long value) {
-    //TODO hybrid branch prediction
+void BranchPredictor::hybrid(long value) {
+    //TODO bimodal branch prediction
 }
 //Delegator Methods for each mode

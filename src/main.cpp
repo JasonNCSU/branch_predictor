@@ -32,6 +32,7 @@ int main(int argc, char **argv) {
     BranchPredictor branch_predict;
 
     int result = strcmp(mode, "bimodal");
+    //bimodal
     if (result == 0) {
         m2_bits = strtol(argv[2], nullptr, 10);
         btb_size = strtol(argv[3], nullptr, 10);
@@ -40,7 +41,9 @@ int main(int argc, char **argv) {
 
         branch_predict.bimodal_setter(m2_bits, trace_file);
 
-    } else if (result == 5) {
+    }
+    //gshare
+    else if (result == 5) {
         m1_bits = strtol(argv[2], nullptr, 10);
         n_bits = strtol(argv[3], nullptr, 10);
         btb_size = strtol(argv[4], nullptr, 10);
@@ -49,7 +52,9 @@ int main(int argc, char **argv) {
 
         branch_predict.gshare_setter(m1_bits, n_bits, trace_file);
 
-    } else {
+    }
+    //hybrid
+    else {
         k_bits = strtol(argv[2], nullptr, 10);
         m1_bits = strtol(argv[3], nullptr, 10);
         n_bits = strtol(argv[4], nullptr, 10);
@@ -69,18 +74,22 @@ int main(int argc, char **argv) {
 
     ifstream input(trace_file);
     while (getline(input, data_segment)) {
-        value = strtol(data_segment.substr(0, 5).c_str(), nullptr, 10);
         real_route = data_segment.at(7);
+        value = strtol(data_segment.substr(0, 5).c_str(), nullptr, 10);
 
+        //sets the branch taken/not-taken value
+        branch_predict.route_setter(real_route);
         //bimodal
         if (result == 0) {
-            branch_predict.bimodal(real_route, value);
-        } //gshare
+            branch_predict.bimodal(value);
+        }
+        //gshare
         else if (result == 5) {
-            branch_predict.gshare(real_route, value);
-        } //hybrid
+            branch_predict.gshare(value);
+        }
+        //hybrid
         else {
-            branch_predict.hybrid(real_route, value);
+            branch_predict.hybrid(value);
         }
     }
 
