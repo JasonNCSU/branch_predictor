@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
     //char *varible_name = arg gets the argument as a char array
     char *trace_file;
     char *mode;
+    char *exe_command;
 
     int m2_bits;
     int btb_size; //ignored since extra credit
@@ -28,6 +29,7 @@ int main(int argc, char **argv) {
 
     int k_bits;
 
+    exe_command = argv[0];
     mode = argv[1];
     BranchPredictor branch_predict;
 
@@ -92,6 +94,8 @@ int main(int argc, char **argv) {
             branch_predict.hybrid(value);
         }
     }
+
+    branch_predict.print_result(result, exe_command, mode, btb_size, btb_assoc);
 
     //Signals the end of the program
     return 0;

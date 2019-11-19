@@ -44,3 +44,31 @@ void BranchPredictor::hybrid(long value) {
     //TODO bimodal branch prediction
 }
 //Delegator Methods for each mode
+
+void BranchPredictor::verify_prediction(char prediction) {
+    total_predictions++;
+    if (prediction != real_path) {
+        total_mispredictions++;
+    }
+}
+
+void BranchPredictor::print_result(int result, char *exe_command, char *mode, int btb_size, int btb_assoc) {
+
+    //rounds misprediction rate to 2 decimals
+    misprediction_rate = total_mispredictions / total_predictions;
+    misprediction_rate = (int) (misprediction_rate * 100 + 0.5);
+    misprediction_rate = misprediction_rate / 100;
+
+    //bimodal
+    if (result == 0) {
+        
+    }
+    //gshare
+    else if (result == 5) {
+
+    }
+    //hybrid
+    else {
+
+    }
+}

@@ -9,15 +9,20 @@
 class BranchPredictor {
 private:
     //methods============================
+    void verify_prediction(char prediction);
 
     //variables==========================
+    char real_path;
+
     char *trace_file;
     int m2_bits;
     int m1_bits;
     int n_bits;
     int k_bits;
 
-    char real_path;
+    double total_predictions;
+    double total_mispredictions;
+    double misprediction_rate;
 
 public:
     //constructors=======================
@@ -32,6 +37,8 @@ public:
     void bimodal(long value);
     void gshare(long value);
     void hybrid(long value);
+
+    void print_result(int result, char *exe_command, char *mode, int btb_size, int btb_assoc);
 };
 
 
