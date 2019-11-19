@@ -42,7 +42,6 @@ int main(int argc, char **argv) {
         trace_file = argv[5];
 
         branch_predict.bimodal_setter(m2_bits, trace_file);
-
     }
     //gshare
     else if (result == 5) {
@@ -53,7 +52,6 @@ int main(int argc, char **argv) {
         trace_file = argv[6];
 
         branch_predict.gshare_setter(m1_bits, n_bits, trace_file);
-
     }
     //hybrid
     else {
@@ -66,7 +64,6 @@ int main(int argc, char **argv) {
         trace_file = argv[8];
 
         branch_predict.hybrid_setter(k_bits, m1_bits, n_bits, m2_bits, trace_file);
-
     }
 
     //Reads in trace file

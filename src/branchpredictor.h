@@ -10,6 +10,10 @@ class BranchPredictor {
 private:
     //methods============================
     void verify_prediction(char prediction);
+    void print_predictions(void);
+    void print_bimodal_contents(void);
+    void print_gshare_contents(void);
+    void print_chooser_contents(void);
 
     //variables==========================
     char real_path;
@@ -19,6 +23,14 @@ private:
     int m1_bits;
     int n_bits;
     int k_bits;
+
+    int *bimodal_array;
+    int *gshare_array;
+    int *chooser_array;
+
+    int bimodal_length;
+    int gshare_length;
+    int chooser_length;
 
     double total_predictions;
     double total_mispredictions;
