@@ -29,6 +29,7 @@ int main(int argc, char **argv) {
     int k_bits;
 
     mode = argv[1];
+    BranchPredictor branch_predict();
 
     int result = strcmp(mode, "bimodal");
     if (result == 0) {
@@ -36,16 +37,12 @@ int main(int argc, char **argv) {
         btb_size = strtol(argv[3], nullptr, 10);
         btb_assoc = strtol(argv[4], nullptr, 10);
         trace_file = argv[5];
-
-        BranchPredictor branch_predict(m2_bits, trace_file);
     } else if (result == 5) {
         m1_bits = strtol(argv[2], nullptr, 10);
         n_bits = strtol(argv[3], nullptr, 10);
         btb_size = strtol(argv[4], nullptr, 10);
         btb_assoc = strtol(argv[5], nullptr, 10);
         trace_file = argv[6];
-
-        BranchPredictor branch_predict(m1_bits, n_bits, trace_file);
     } else {
         k_bits = strtol(argv[2], nullptr, 10);
         m1_bits = strtol(argv[3], nullptr, 10);
@@ -54,21 +51,21 @@ int main(int argc, char **argv) {
         btb_size = strtol(argv[6], nullptr, 10);
         btb_assoc = strtol(argv[7], nullptr, 10);
         trace_file = argv[8];
-
-        BranchPredictor branch_predict(k_bits, m1_bits, n_bits, m2_bits, trace_file);
     }
 
     //Reads in trace file
     string data_segment;
     ifstream input(trace_file);
     while (getline(input, data_segment)) {
-        //do stuff with each input
-        if (strcmp(mode, "bimodal") == 0) {
-
-        } else if (strcmp(mode, "gshare") == 0) {
-
-        } else {
-
+        //bimodal
+        if (result == 0) {
+            branch_predict.bimodal(data_segment);
+        } //gshare
+        else if (result == 5) {
+            branch_predict.gshare(data_segment);
+        } //hybrid
+        else {
+            branch_predict.hybrid(data_segment);
         }
     }
 
