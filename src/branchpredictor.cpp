@@ -8,7 +8,7 @@
 
 using namespace std;
 
-//Default constructor
+//Default Constructor
 BranchPredictor::BranchPredictor(void) {
     //set all values to 0 if it complains
     m2_bits = 0;
@@ -30,6 +30,7 @@ BranchPredictor::BranchPredictor(void) {
     gshare_length = 0;
     chooser_length = 0;
 }
+//Default Constructor
 
 //Setter methods, instead of constructor due to the way that C++ initializes objects
 void BranchPredictor::bimodal_setter(int m2, char *file) {
@@ -80,7 +81,7 @@ void BranchPredictor::verify_prediction(char prediction) {
     }
 }
 
-//print statements
+//Print Statements
 void BranchPredictor::print_result(int result, char *exe_command, char *mode, int btb_size, int btb_assoc) {
 
     //rounds misprediction rate to 2 decimals
@@ -108,31 +109,28 @@ void BranchPredictor::print_result(int result, char *exe_command, char *mode, in
         BranchPredictor::print_bimodal_contents();
     }
 }
-
 void BranchPredictor::print_predictions(void) {
     cout << "OUTPUT" << endl;
     cout << " " << "number of predictions: " << total_predictions << endl;
     cout << " " << "number of mispredictions: " << total_mispredictions << endl;
     cout << " " << "misprediction rate: " << misprediction_rate << endl;
 }
-
 void BranchPredictor::print_bimodal_contents(void) {
     cout << "FINAL BIMODAL CONTENTS" << endl;
     for (int i = 0; i < bimodal_length; i++) {
         cout << i << " " << bimodal_array[i] << endl;
     }
 }
-
 void BranchPredictor::print_gshare_contents(void) {
     cout << "FINAL GSHARE CONTENTS" << endl;
     for (int i = 0; i < gshare_length; i++) {
         cout << i << " " << gshare_array[i] << endl;
     }
 }
-
 void BranchPredictor::print_chooser_contents(void) {
     cout << "FINAL CHOOSER CONTENTS" << endl;
     for (int i = 0; i < chooser_length; i++) {
         cout << i << " " << chooser_array[i] << endl;
     }
 }
+//Print Statements
