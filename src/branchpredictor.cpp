@@ -86,7 +86,7 @@ void BranchPredictor::bimodal(long value) {
     bimodal_table_update(bimodal_table_index);
 }
 void BranchPredictor::gshare(long value) {
-    //TODO gshare branch prediction
+    int gshare_table_index = get_gshare_table_index(value);
 }
 void BranchPredictor::hybrid(long value) {
     //TODO hybrid branch prediction
@@ -96,6 +96,10 @@ void BranchPredictor::hybrid(long value) {
 //manipulate passed in value
 int BranchPredictor::get_bimodal_table_index(long initial_value) {
     return ((1 << m2_bits) - 1) & (initial_value >> offset_bits);
+}
+int BranchPredictor::get_gshare_table_index(long initial_value) {
+    int pc_m_plus1 = ((1 << m1_bits) - 1) & (initial_value >> offset_bits);
+    
 }
 //manipulate passed in value
 

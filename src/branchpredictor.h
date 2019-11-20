@@ -11,6 +11,7 @@ private:
     //methods============================
     void initialize_bimodal_array(void);
     int get_bimodal_table_index(long initial_value);
+    int get_gshare_table_index(long initial_value);
 
     char bimodal_prediction(int bimodal_table_index);
     void verify_prediction(char prediction);
