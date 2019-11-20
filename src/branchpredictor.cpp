@@ -256,13 +256,13 @@ void BranchPredictor::print_result(int result, char *exe_command, char *mode, in
 
     cout << "COMMAND" << endl;
     //bimodal
-    if (result == 0) {
+    if (result == 1) {
         cout << exe_command << " " << mode << " " << m2_bits << " " << btb_size << " " << btb_assoc << " " << trace_file << endl;
         BranchPredictor::print_predictions();
         BranchPredictor::print_bimodal_contents();
     }
     //gshare
-    else if (result == 5) {
+    else if (result == 2) {
         cout << exe_command << " " << mode << " " << m1_bits << " " << n_bits << " " << btb_size << " " << btb_assoc << " " << trace_file << endl;
         BranchPredictor::print_predictions();
         BranchPredictor::print_gshare_contents();
