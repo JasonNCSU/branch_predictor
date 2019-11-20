@@ -163,20 +163,20 @@ void BranchPredictor::gshare_table_update(int gshare_table_index) {
     int counter = gshare_array[gshare_table_index];
     if (real_path == 't') {
         if (counter >= counter_max) {
-            bimodal_array[gshare_table_index] = 3;
+            gshare_array[gshare_table_index] = 3;
         } else {
-            bimodal_array[gshare_table_index]++;
+            gshare_array[gshare_table_index]++;
         }
     } else {
         if (counter <= counter_min) {
-            bimodal_array[gshare_table_index] = 0;
+            gshare_array[gshare_table_index] = 0;
         } else {
-            bimodal_array[gshare_table_index]--;
+            gshare_array[gshare_table_index]--;
         }
     }
 }
 void BranchPredictor::gshare_global_update() {
-    gshare_global_history >> 1;
+    gshare_global_history >>= 1;
     if (real_path == 't') {
         gshare_global_history += gshare_global_add;
     }
