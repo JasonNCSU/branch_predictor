@@ -16,18 +16,18 @@ int main(int argc, char **argv) {
     //argv[0] is the program name, so we start with 1 as our inputs
     //strtol(arg, nullptr, 10) gets the argument as an int
     //char *varible_name = arg gets the argument as a char array
-    char *trace_file;
-    char *mode;
-    char *exe_command;
+    char *trace_file = nullptr;
+    char *mode = nullptr;
+    char *exe_command = nullptr;
 
-    int m2_bits;
-    int btb_size; //ignored since extra credit
-    int btb_assoc; //ignored since extra credit
+    int m2_bits = 0;
+    int btb_size = 0; //ignored since extra credit
+    int btb_assoc = 0; //ignored since extra credit
 
-    int m1_bits;
-    int n_bits;
+    int m1_bits = 0;
+    int n_bits = 0;
 
-    int k_bits;
+    int k_bits = 0;
 
     exe_command = argv[0];
     mode = argv[1];
@@ -68,8 +68,8 @@ int main(int argc, char **argv) {
 
     //Reads in trace file
     string data_segment;
-    long value;
-    char real_route;
+    long value = 0;
+    char real_route = 0;
 
     ifstream input(trace_file);
     while (getline(input, data_segment)) {
