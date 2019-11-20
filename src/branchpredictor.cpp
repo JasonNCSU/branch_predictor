@@ -67,9 +67,17 @@ void BranchPredictor::hybrid_setter(int k, int m1, int n, int m2, char *file) {
     m2_bits = m2;
     trace_file = file;
 
-    bimodal_array = new int[m2_bits];
-    gshare_array = new int[m1_bits];
-    chooser_array = new int[k_bits];
+    bimodal_length = (1 << m2_bits);
+    gshare_length = (1 << m1_bits);
+    chooser_length = (1 << k_bits);
+
+    bimodal_array = new int[bimodal_length];
+    gshare_array = new int[gshare_length];
+    chooser_array = new int[chooser_length];
+
+    initialize_bimodal_array();
+    initialize_gshare_array();
+    initialize_chooser_array();
 }
 void BranchPredictor::route_setter(char route) {
     real_path = route;
@@ -85,6 +93,11 @@ void BranchPredictor::initialize_bimodal_array(void) {
 void BranchPredictor::initialize_gshare_array(void) {
     for (int i = 0; i < gshare_length; i++) {
         gshare_array[i] = 2;
+    }
+}
+void BranchPredictor::initialize_chooser_array(void) {
+    for (int i = 0; i < chooser_length; i++) {
+        chooser_array[i] = 2;
     }
 }
 //Initialize Arrays
@@ -104,7 +117,13 @@ void BranchPredictor::gshare(long value) {
     gshare_global_update();
 }
 void BranchPredictor::hybrid(long value) {
-    //TODO hybrid branch prediction
+    int bimodal_table_index = get_bimodal_table_index(value);
+    char bimodal_predicted_path = bimodal_prediction(bimodal_table_index);
+
+    int gshare_table_index = get_gshare_table_index(value);
+    char gshare_predicted_path = gshare_prediction(gshare_table_index);
+
+    int chooser_table_index = get_chooser_table_index(value);
 }
 //Delegator Methods for each mode
 
@@ -117,6 +136,9 @@ int BranchPredictor::get_gshare_table_index(long initial_value) {
     int most_significant_index = (gshare_global_history ^ (pc_m_plus1 >> (m1_bits - n_bits))) << (m1_bits - n_bits);
     int least_significant_index = ((1 << (m1_bits - n_bits)) - 1) & pc_m_plus1;
     return (most_significant_index | least_significant_index);
+}
+int BranchPredictor::get_chooser_table_index(long initial_value) {
+    return ((1 << k_bits) - 1) & (initial_value >> offset_bits);
 }
 //manipulate passed in value
 

@@ -11,9 +11,11 @@ private:
     //methods============================
     void initialize_bimodal_array(void);
     void initialize_gshare_array(void);
+    void initialize_chooser_array(void);
 
     int get_bimodal_table_index(long initial_value);
     int get_gshare_table_index(long initial_value);
+    int get_chooser_table_index(long initial_value);
 
     char bimodal_prediction(int bimodal_table_index);
     char gshare_prediction(int gshare_table_index);
