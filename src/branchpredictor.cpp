@@ -97,7 +97,7 @@ void BranchPredictor::initialize_gshare_array(void) {
 }
 void BranchPredictor::initialize_chooser_array(void) {
     for (int i = 0; i < chooser_length; i++) {
-        chooser_array[i] = 2;
+        chooser_array[i] = 1;
     }
 }
 //Initialize Arrays
