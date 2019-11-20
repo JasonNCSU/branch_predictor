@@ -38,10 +38,6 @@ BranchPredictor::BranchPredictor(void) {
     bimodal_length = 0;
     gshare_length = 0;
     chooser_length = 0;
-
-    total_predictions = 0;
-    total_mispredictions = 0;
-    misprediction_rate = 0;
 }
 //Default Constructor
 
