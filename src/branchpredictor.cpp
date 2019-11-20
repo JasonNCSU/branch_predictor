@@ -68,6 +68,7 @@ void BranchPredictor::hybrid_setter(int k, int m1, int n, int m2, char *file) {
     trace_file = file;
 
     bimodal_length = (1 << m2_bits);
+    gshare_global_add = (1 << (n_bits - 1));
     gshare_length = (1 << m1_bits);
     chooser_length = (1 << k_bits);
 
