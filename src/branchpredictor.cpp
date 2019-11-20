@@ -11,6 +11,8 @@ using namespace std;
 //Default Constructor
 BranchPredictor::BranchPredictor(void) {
     //set all values to 0 if it complains
+    offset_bits = 2;
+
     m2_bits = 0;
     n_bits = 0;
     m1_bits = 0;
@@ -21,6 +23,9 @@ BranchPredictor::BranchPredictor(void) {
     bimodal_array = nullptr;
     gshare_array = nullptr;
     chooser_array = nullptr;
+
+    bimodal_min = 1;
+    bimodal_max = 2;
 
     total_predictions = 0;
     total_mispredictions = 0;
@@ -38,6 +43,7 @@ void BranchPredictor::bimodal_setter(int m2, char *file) {
     trace_file = file;
 
     bimodal_array = new int[m2_bits];
+    initialize_bimodal_array();
 }
 void BranchPredictor::gshare_setter(int m1, int n, char *file) {
     m1_bits = m1;
@@ -62,24 +68,67 @@ void BranchPredictor::route_setter(char route) {
 }
 //Setter methods, instead of constructor due to the way that C++ initializes objects
 
+//Initialize Arrays
+void BranchPredictor::initialize_bimodal_array(void) {
+    for (int i = 0; i < m2_bits; i++) {
+        bimodal_array[i] = 2;
+    }
+}
+//Initialize Arrays
+
 //Delegator Methods for each mode
 void BranchPredictor::bimodal(long value) {
-    //TODO bimodal branch prediction
+    int bimodal_table_index = get_bimodal_table_index(value);
+    char bimodal_predicted_path = bimodal_prediction(bimodal_table_index);
+    verify_prediction(bimodal_predicted_path);
+    bimodal_table_update(bimodal_table_index);
 }
 void BranchPredictor::gshare(long value) {
-    //TODO bimodal branch prediction
+    //TODO gshare branch prediction
 }
 void BranchPredictor::hybrid(long value) {
-    //TODO bimodal branch prediction
+    //TODO hybrid branch prediction
 }
 //Delegator Methods for each mode
 
+//manipulate passed in value
+int BranchPredictor::get_bimodal_table_index(long initial_value) {
+    return ((1 << m2_bits+1) - 1) & (initial_value >> offset_bits);
+}
+//manipulate passed in value
+
+//prediction associated methods
+char BranchPredictor::bimodal_prediction(int bimodal_table_index) {
+    int counter = bimodal_array[bimodal_table_index];
+    if (counter >= 2) {
+        return 't';
+    } else {
+        return 'n';
+    }
+}
 void BranchPredictor::verify_prediction(char prediction) {
     total_predictions++;
     if (prediction != real_path) {
         total_mispredictions++;
     }
 }
+void BranchPredictor::bimodal_table_update(int bimodal_table_index) {
+    int counter = bimodal_array[bimodal_table_index];
+    if (real_path == 't') {
+        if (counter >= bimodal_max) {
+            bimodal_array[bimodal_table_index] = 3;
+        } else {
+            bimodal_array[bimodal_table_index]++;
+        }
+    } else {
+        if (counter <= bimodal_min) {
+            bimodal_array[bimodal_table_index] = 0;
+        } else {
+            bimodal_array[bimodal_table_index]--;
+        }
+    }
+}
+//prediction associated methods
 
 //Print Statements
 void BranchPredictor::print_result(int result, char *exe_command, char *mode, int btb_size, int btb_assoc) {

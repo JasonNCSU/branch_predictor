@@ -9,7 +9,13 @@
 class BranchPredictor {
 private:
     //methods============================
+    void initialize_bimodal_array(void);
+    int get_bimodal_table_index(long initial_value);
+
+    char bimodal_prediction(int bimodal_table_index);
     void verify_prediction(char prediction);
+    void bimodal_table_update(int bimodal_table_index);
+
     void print_predictions(void);
     void print_bimodal_contents(void);
     void print_gshare_contents(void);
@@ -18,11 +24,16 @@ private:
     //variables==========================
     char real_path;
 
+    int offset_bits;
+
     char *trace_file;
     int m2_bits;
     int m1_bits;
     int n_bits;
     int k_bits;
+
+    int bimodal_min;
+    int bimodal_max;
 
     int *bimodal_array;
     int *gshare_array;
