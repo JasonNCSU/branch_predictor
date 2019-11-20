@@ -21,7 +21,7 @@ private:
     void verify_prediction(char prediction);
     void bimodal_table_update(int bimodal_table_index);
     void gshare_table_update(int gshare_table_index);
-    void gshare_update_global(void);
+    void gshare_global_update(void);
 
     void print_predictions(void);
     void print_bimodal_contents(void);
@@ -41,6 +41,7 @@ private:
 
     int counter_min;
     int counter_max;
+    int gshare_global_add;
 
     int *bimodal_array;
     int *gshare_array;

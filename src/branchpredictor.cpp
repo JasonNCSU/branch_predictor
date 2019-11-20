@@ -29,6 +29,7 @@ BranchPredictor::BranchPredictor(void) {
 
     counter_min = 1;
     counter_max = 2;
+    gshare_global_add = 0;
 
     total_predictions = 0;
     total_mispredictions = 0;
@@ -53,6 +54,7 @@ void BranchPredictor::gshare_setter(int m1, int n, char *file) {
     m1_bits = m1;
     n_bits = n;
     trace_file = file;
+    gshare_global_add = (1 << (n_bits - 1));
     gshare_length = (1 << m1_bits);
 
     gshare_array = new int[gshare_length];
@@ -99,6 +101,7 @@ void BranchPredictor::gshare(long value) {
     char gshare_predicted_path = gshare_prediction(gshare_table_index);
     verify_prediction(gshare_predicted_path);
     gshare_table_update(gshare_table_index);
+    gshare_global_update();
 }
 void BranchPredictor::hybrid(long value) {
     //TODO hybrid branch prediction
@@ -111,8 +114,9 @@ int BranchPredictor::get_bimodal_table_index(long initial_value) {
 }
 int BranchPredictor::get_gshare_table_index(long initial_value) {
     int pc_m_plus1 = ((1 << m1_bits) - 1) & (initial_value >> offset_bits);
-    int most_significant_index = (gshare_global_history ^ (pc_m_plus1 >> (m1_bits - n_bits)));
+    int most_significant_index = (gshare_global_history ^ (pc_m_plus1 >> (m1_bits - n_bits))) << (m1_bits - n_bits);
     int least_significant_index = ((1 << (m1_bits - n_bits)) - 1) & pc_m_plus1;
+    return (most_significant_index | least_significant_index);
 }
 //manipulate passed in value
 
@@ -171,8 +175,11 @@ void BranchPredictor::gshare_table_update(int gshare_table_index) {
         }
     }
 }
-void BranchPredictor::gshare_update_global() {
-
+void BranchPredictor::gshare_global_update() {
+    gshare_global_history >> 1;
+    if (real_path == 't') {
+        gshare_global_history += gshare_global_add;
+    }
 }
 //prediction associated methods
 
