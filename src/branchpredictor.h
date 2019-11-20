@@ -19,11 +19,13 @@ private:
 
     char bimodal_prediction(int bimodal_table_index);
     char gshare_prediction(int gshare_table_index);
+    char chooser_prediction(int chooser_table_index);
 
     void verify_prediction(char prediction);
     void bimodal_table_update(int bimodal_table_index);
     void gshare_table_update(int gshare_table_index);
     void gshare_global_update(void);
+    void chooser_table_update(char bimodal_predicted_path, char gshare_predicted_path, int chooser_table_index);
 
     void print_predictions(void);
     void print_bimodal_contents(void);

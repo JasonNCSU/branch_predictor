@@ -124,6 +124,17 @@ void BranchPredictor::hybrid(long value) {
     char gshare_predicted_path = gshare_prediction(gshare_table_index);
 
     int chooser_table_index = get_chooser_table_index(value);
+    char chooser_predicted_path = chooser_prediction(chooser_table_index);
+    if (chooser_predicted_path == 'b') {
+        verify_prediction(bimodal_predicted_path);
+        bimodal_table_update(bimodal_table_index);
+    } else {
+        verify_prediction(gshare_predicted_path);
+        gshare_table_update(gshare_table_index);
+    }
+    gshare_global_update();
+
+    chooser_table_update(bimodal_predicted_path, gshare_predicted_path, chooser_table_index);
 }
 //Delegator Methods for each mode
 
@@ -159,12 +170,23 @@ char BranchPredictor::gshare_prediction(int gshare_table_index) {
         return 'n';
     }
 }
+char BranchPredictor::chooser_prediction(int chooser_table_index) {
+    int counter = chooser_array[chooser_table_index];
+    if (counter >= 2) {
+        return 'g';
+    } else {
+        return 'b';
+    }
+}
 void BranchPredictor::verify_prediction(char prediction) {
     total_predictions++;
     if (prediction != real_path) {
         total_mispredictions++;
     }
 }
+//prediction associated methods
+
+//update table methods
 void BranchPredictor::bimodal_table_update(int bimodal_table_index) {
     int counter = bimodal_array[bimodal_table_index];
     if (real_path == 't') {
@@ -203,7 +225,24 @@ void BranchPredictor::gshare_global_update() {
         gshare_global_history += gshare_global_add;
     }
 }
-//prediction associated methods
+void BranchPredictor::chooser_table_update(char bimodal_predicted_path, char gshare_predicted_path, int chooser_table_index) {
+    int counter = chooser_array[chooser_table_index];
+
+    if (bimodal_predicted_path != real_path && gshare_predicted_path == real_path) {
+        if (counter >= counter_max) {
+            chooser_array[chooser_table_index] = 3;
+        } else {
+            chooser_array[chooser_table_index]++;
+        }
+    } else if (bimodal_predicted_path == real_path && gshare_predicted_path != real_path) {
+        if (counter <= counter_min) {
+            chooser_array[chooser_table_index] = 0;
+        } else {
+            chooser_array[chooser_table_index]--;
+        }
+    }
+}
+//update table methods
 
 //Print Statements
 void BranchPredictor::print_result(int result, char *exe_command, char *mode, int btb_size, int btb_assoc) {
