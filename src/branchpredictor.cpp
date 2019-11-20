@@ -5,6 +5,7 @@
 #include "branchpredictor.h"
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
@@ -41,8 +42,9 @@ BranchPredictor::BranchPredictor(void) {
 void BranchPredictor::bimodal_setter(int m2, char *file) {
     m2_bits = m2;
     trace_file = file;
+    bimodal_length = (1 << m2_bits);
 
-    bimodal_array = new int[m2_bits];
+    bimodal_array = new int[bimodal_length];
     initialize_bimodal_array();
 }
 void BranchPredictor::gshare_setter(int m1, int n, char *file) {
@@ -70,7 +72,7 @@ void BranchPredictor::route_setter(char route) {
 
 //Initialize Arrays
 void BranchPredictor::initialize_bimodal_array(void) {
-    for (int i = 0; i < m2_bits; i++) {
+    for (int i = 0; i < bimodal_length; i++) {
         bimodal_array[i] = 2;
     }
 }
@@ -93,7 +95,7 @@ void BranchPredictor::hybrid(long value) {
 
 //manipulate passed in value
 int BranchPredictor::get_bimodal_table_index(long initial_value) {
-    return ((1 << m2_bits+1) - 1) & (initial_value >> offset_bits);
+    return ((1 << m2_bits) - 1) & (initial_value >> offset_bits);
 }
 //manipulate passed in value
 
@@ -134,7 +136,10 @@ void BranchPredictor::bimodal_table_update(int bimodal_table_index) {
 void BranchPredictor::print_result(int result, char *exe_command, char *mode, int btb_size, int btb_assoc) {
 
     //rounds misprediction rate to 2 decimals
-    misprediction_rate = (double) (lround(((total_mispredictions / total_predictions) * 100))) / 100;
+    double temp = ((double) total_mispredictions / (double) total_predictions) * 10000;
+    temp = lround(temp);
+    misprediction_rate = temp / 100;
+    //misprediction_rate = (double) (lround(((total_mispredictions / total_predictions) * 100)));
 
     cout << "COMMAND" << endl;
     //bimodal
@@ -162,7 +167,7 @@ void BranchPredictor::print_predictions(void) {
     cout << "OUTPUT" << endl;
     cout << " " << "number of predictions: " << total_predictions << endl;
     cout << " " << "number of mispredictions: " << total_mispredictions << endl;
-    cout << " " << "misprediction rate: " << misprediction_rate << endl;
+    cout << setprecision(2) << fixed << " " << "misprediction rate: " << misprediction_rate << "%" << endl;
 }
 void BranchPredictor::print_bimodal_contents(void) {
     cout << "FINAL BIMODAL CONTENTS" << endl;

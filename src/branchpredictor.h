@@ -43,8 +43,8 @@ private:
     int gshare_length;
     int chooser_length;
 
-    double total_predictions;
-    double total_mispredictions;
+    int total_predictions;
+    int total_mispredictions;
     double misprediction_rate;
 
 public:

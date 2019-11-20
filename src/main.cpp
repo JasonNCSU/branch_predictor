@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
     ifstream input(trace_file);
     while (getline(input, data_segment)) {
         real_route = data_segment.at(7);
-        value = strtol(data_segment.substr(0, 5).c_str(), nullptr, 10);
+        value = strtoul(data_segment.substr(0, 6).c_str(), nullptr, 16);
 
         //sets the branch taken/not-taken value
         branch_predict.route_setter(real_route);
