@@ -25,8 +25,10 @@ BranchPredictor::BranchPredictor(void) {
     gshare_array = nullptr;
     chooser_array = nullptr;
 
-    bimodal_min = 1;
-    bimodal_max = 2;
+    gshare_global_history = 0;
+
+    counter_min = 1;
+    counter_max = 2;
 
     total_predictions = 0;
     total_mispredictions = 0;
@@ -51,8 +53,10 @@ void BranchPredictor::gshare_setter(int m1, int n, char *file) {
     m1_bits = m1;
     n_bits = n;
     trace_file = file;
+    gshare_length = (1 << m1_bits);
 
-    gshare_array = new int[m1_bits];
+    gshare_array = new int[gshare_length];
+    initialize_gshare_array();
 }
 void BranchPredictor::hybrid_setter(int k, int m1, int n, int m2, char *file) {
     k_bits = k;
@@ -76,6 +80,11 @@ void BranchPredictor::initialize_bimodal_array(void) {
         bimodal_array[i] = 2;
     }
 }
+void BranchPredictor::initialize_gshare_array(void) {
+    for (int i = 0; i < gshare_length; i++) {
+        gshare_array[i] = 2;
+    }
+}
 //Initialize Arrays
 
 //Delegator Methods for each mode
@@ -87,6 +96,9 @@ void BranchPredictor::bimodal(long value) {
 }
 void BranchPredictor::gshare(long value) {
     int gshare_table_index = get_gshare_table_index(value);
+    char gshare_predicted_path = gshare_prediction(gshare_table_index);
+    verify_prediction(gshare_predicted_path);
+    gshare_table_update(gshare_table_index);
 }
 void BranchPredictor::hybrid(long value) {
     //TODO hybrid branch prediction
@@ -99,13 +111,22 @@ int BranchPredictor::get_bimodal_table_index(long initial_value) {
 }
 int BranchPredictor::get_gshare_table_index(long initial_value) {
     int pc_m_plus1 = ((1 << m1_bits) - 1) & (initial_value >> offset_bits);
-    
+    int most_significant_index = (gshare_global_history ^ (pc_m_plus1 >> (m1_bits - n_bits)));
+    int least_significant_index = ((1 << (m1_bits - n_bits)) - 1) & pc_m_plus1;
 }
 //manipulate passed in value
 
 //prediction associated methods
 char BranchPredictor::bimodal_prediction(int bimodal_table_index) {
     int counter = bimodal_array[bimodal_table_index];
+    if (counter >= 2) {
+        return 't';
+    } else {
+        return 'n';
+    }
+}
+char BranchPredictor::gshare_prediction(int gshare_table_index) {
+    int counter = gshare_array[gshare_table_index];
     if (counter >= 2) {
         return 't';
     } else {
@@ -121,18 +142,37 @@ void BranchPredictor::verify_prediction(char prediction) {
 void BranchPredictor::bimodal_table_update(int bimodal_table_index) {
     int counter = bimodal_array[bimodal_table_index];
     if (real_path == 't') {
-        if (counter >= bimodal_max) {
+        if (counter >= counter_max) {
             bimodal_array[bimodal_table_index] = 3;
         } else {
             bimodal_array[bimodal_table_index]++;
         }
     } else {
-        if (counter <= bimodal_min) {
+        if (counter <= counter_min) {
             bimodal_array[bimodal_table_index] = 0;
         } else {
             bimodal_array[bimodal_table_index]--;
         }
     }
+}
+void BranchPredictor::gshare_table_update(int gshare_table_index) {
+    int counter = gshare_array[gshare_table_index];
+    if (real_path == 't') {
+        if (counter >= counter_max) {
+            bimodal_array[gshare_table_index] = 3;
+        } else {
+            bimodal_array[gshare_table_index]++;
+        }
+    } else {
+        if (counter <= counter_min) {
+            bimodal_array[gshare_table_index] = 0;
+        } else {
+            bimodal_array[gshare_table_index]--;
+        }
+    }
+}
+void BranchPredictor::gshare_update_global() {
+
 }
 //prediction associated methods
 

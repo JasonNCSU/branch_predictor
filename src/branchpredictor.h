@@ -10,12 +10,18 @@ class BranchPredictor {
 private:
     //methods============================
     void initialize_bimodal_array(void);
+    void initialize_gshare_array(void);
+
     int get_bimodal_table_index(long initial_value);
     int get_gshare_table_index(long initial_value);
 
     char bimodal_prediction(int bimodal_table_index);
+    char gshare_prediction(int gshare_table_index);
+
     void verify_prediction(char prediction);
     void bimodal_table_update(int bimodal_table_index);
+    void gshare_table_update(int gshare_table_index);
+    void gshare_update_global(void);
 
     void print_predictions(void);
     void print_bimodal_contents(void);
@@ -33,12 +39,14 @@ private:
     int n_bits;
     int k_bits;
 
-    int bimodal_min;
-    int bimodal_max;
+    int counter_min;
+    int counter_max;
 
     int *bimodal_array;
     int *gshare_array;
     int *chooser_array;
+
+    int gshare_global_history;
 
     int bimodal_length;
     int gshare_length;
